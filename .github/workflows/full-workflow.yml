@@ -1,0 +1,63 @@
+name: Deployment Complete Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use nodeJS ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Static Analysis
+        run: yarn lint && yarn style:check
+
+      - name: Run all tests
+        run: yarn test
+
+      - name: Run mutation tests
+        run: yarn test:mutation
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use nodeJS ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Generate new release
+        id: semantic-release
+        uses: codfish/semantic-release-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: check for new release
+        if: steps.semantic-release.outputs.new-release-published == 'false'
+        run: |
+          echo "::error ::There's no new release version."
+          exit 1

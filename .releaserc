@@ -1,0 +1,192 @@
+{
+  "repositoryUrl": "https://github.com/lucsimao/node-api-template",
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "master",
+    "develop",
+    "(RC)+([0-9])?({+([0-9])})",
+    "(sprint)+([0-9])?({+([0-9])})"
+  ],
+  "verifyConditions": [
+    [
+      "@semantic-release/changelog"
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "src/index.ts",
+            "label": "Node Api Template"
+          }
+        ]
+      }
+    ]
+  ],
+  "analyzeCommits": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "releaseRules": [
+          {
+            "breaking": true,
+            "release": "major"
+          },
+          {
+            "revert": true,
+            "release": "patch"
+          },
+          {
+            "type": "feat",
+            "release": "minor"
+          },
+          {
+            "type": "fix",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "style",
+            "release": "patch"
+          }
+        ],
+        "parserOpts": {
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES"
+          ]
+        }
+      }
+    ]
+  ],
+  "verifyRelease": [],
+  "generateNotes": [
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {
+              "type": "feat",
+              "section": ":sparkles: New Features",
+              "hidden": false
+            },
+            {
+              "type": "fix",
+              "section": ":bug: Fixes",
+              "hidden": false
+            },
+            {
+              "type": "docs",
+              "section": ":memo: Documentation",
+              "hidden": false
+            },
+            {
+              "type": "style",
+              "section": ":barber: Style",
+              "hidden": false
+            },
+            {
+              "type": "refactor",
+              "section": ":zap: Refactor",
+              "hidden": false
+            },
+            {
+              "type": "perf",
+              "section": ":fast_forward: Performance",
+              "hidden": false
+            },
+            {
+              "type": "test",
+              "section": ":white_check_mark: Tests",
+              "hidden": false
+            },
+            {
+              "type": "ci",
+              "section": ":repeat: CI",
+              "hidden": false
+            },
+            {
+              "type": "improment",
+              "section": ":muscle: Improvement",
+              "hidden": false
+            },
+            {
+              "type": "chore",
+              "hidden": true
+            }
+          ]
+        },
+        "parserOpts": {
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES",
+            "BREAKING"
+          ]
+        },
+        "writerOpts": {
+          "commitsSort": [
+            "subject",
+            "scope"
+          ]
+        }
+      }
+    ]
+  ],
+  "prepare": [
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ]
+  ],
+  "publish": [
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "src/index.ts",
+            "label": "Node Api Template"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ]
+  ],
+  "fail": [],
+  "success": [],
+  "addChannel": []
+}
