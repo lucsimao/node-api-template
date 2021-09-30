@@ -72,3 +72,5 @@ persistence
 
 #reports
 *.html
+
+reports/*
