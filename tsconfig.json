@@ -13,7 +13,7 @@
     "noImplicitThis": true,
     "resolveJsonModule": true,
     "alwaysStrict": true,
-    "removeComments": false,
+    "removeComments": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -21,7 +21,8 @@
     "baseUrl": "./",
     "rootDirs": ["./src", "./test"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["./src/**/*.ts", "./test/**/*.ts"],
   "exclude": ["./node_modules/*", "dist"]
