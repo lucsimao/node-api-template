@@ -1,6 +1,7 @@
 import Env from './config/Env';
 import Logger from './util/logger';
-import SignRoutes from './routes/SignIn';
+import database from './databases/persistence';
+import routes from './routes';
 import webFramework from './util/webFramework/framework';
 
 export default class App {
@@ -17,27 +18,33 @@ export default class App {
     });
   }
 
-  public setup(): void {
+  public async setup(): Promise<void> {
     Logger.info({ msg: 'Starting application setup...' });
     this.setupMiddlewares();
-    this.setupDatabase();
+    await this.setupDatabase();
     Logger.info({ msg: 'Finished application setup' });
   }
 
   public setupMiddlewares(): void {
     Logger.info({ msg: 'Starting routes setup...' });
-    SignRoutes.addRoute(this.application);
+    routes.setup(this.application);
     Logger.info({ msg: 'Finished routes setup' });
   }
 
-  public setupDatabase(): void {
+  public async setupDatabase(): Promise<void> {
     Logger.info({ msg: 'Connecting to database...' });
+    await database.connect();
     Logger.info({ msg: 'Connected to database successfully' });
   }
 
   public async close(): Promise<void> {
     Logger.info({ msg: 'Closing application...' });
     await this.application.closeServer();
+    await database.close();
     Logger.info({ msg: 'Application Closed' });
+  }
+
+  public getApp(): unknown {
+    return this.application.getApp();
   }
 }

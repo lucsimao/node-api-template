@@ -1,4 +1,4 @@
-import schema from '../dependencies/validators/schema';
+import schema from '../__dependencies__/validators/schema';
 
 export default schema.object({
   nome: schema.string().required(),

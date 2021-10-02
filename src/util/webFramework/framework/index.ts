@@ -1,2 +1,2 @@
-import webFramework from '../../../dependencies/webFramework';
+import webFramework from '../../../__dependencies__/webFramework';
 export default webFramework;

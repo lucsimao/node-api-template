@@ -3,7 +3,7 @@ import { IHttpRequest } from '../interfaces/IHttpRequest';
 import { IHttpResponse } from '../interfaces/IHttpResponse';
 
 export class UsersController implements IController {
-  executeRoute(httpRequest: IHttpRequest): IHttpResponse {
+  public async executeRoute(httpRequest: IHttpRequest): Promise<IHttpResponse> {
     return {
       statusCode: 200 || httpRequest,
       body: `Olá, este é meu primeiro get com meu novo template.`,

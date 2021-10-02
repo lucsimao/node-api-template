@@ -1,2 +1,2 @@
-import Logger from '../../dependencies/logger';
+import Logger from '../../__dependencies__/logger';
 export default Logger;
