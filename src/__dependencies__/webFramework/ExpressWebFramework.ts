@@ -11,6 +11,7 @@ export default class ExpressWebFramework
 
   constructor() {
     this.application = express();
+    this.application.use(express.json());
   }
 
   public startServer(port: number, callback: () => void): void {
@@ -63,5 +64,9 @@ export default class ExpressWebFramework
       headers: req.headers,
       body: req.body,
     };
+  }
+
+  public getApp(): unknown {
+    return this.application;
   }
 }
