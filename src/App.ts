@@ -1,6 +1,7 @@
 import Env from './config/Env';
 import Logger from './util/logger';
 import database from './databases/persistence';
+import notFoundMiddleware from './middlewares/NotFoundMiddleware';
 import routes from './routes';
 import webFramework from './util/webFramework/framework';
 
@@ -28,6 +29,7 @@ export default class App {
   public setupMiddlewares(): void {
     Logger.info({ msg: 'Starting routes setup...' });
     routes.setup(this.application);
+    this.application.addMiddleware(notFoundMiddleware);
     Logger.info({ msg: 'Finished routes setup' });
   }
 
