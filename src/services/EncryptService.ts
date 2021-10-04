@@ -1,17 +1,13 @@
-import bcrypt from 'bcrypt';
-
+import cryptography from './cryptography';
 export default class EncryptService {
-  public static async generateHash(
-    password: string,
-    salt = 10
-  ): Promise<string> {
-    return await bcrypt.hash(password, salt);
+  public static async generateHash(password: string): Promise<string> {
+    return await cryptography.generateHash(password);
   }
 
   public static async compareHash(
     password: string,
     hashedPassword: string
   ): Promise<boolean> {
-    return await bcrypt.compare(password, hashedPassword);
+    return await cryptography.verifyHash(password, hashedPassword);
   }
 }
