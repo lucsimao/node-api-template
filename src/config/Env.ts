@@ -9,6 +9,11 @@ interface IAppEnv {
     database: string;
     ssl: string;
   };
+  auth: {
+    secret: string;
+    expiration: string;
+  };
+  cryptography: { salt: number };
 }
 
 class Envs {
@@ -31,6 +36,13 @@ class Envs {
         port: process.env.DATABASE_PORT || '27017',
         database: process.env.DATABASE_NAME || 'test',
         ssl: process.env.DATABASE_SSL || 'false',
+      },
+      auth: {
+        secret: process.env.AUTH_SECRET || 'secret',
+        expiration: process.env.AUTH_EXPIRATION || '30m',
+      },
+      cryptography: {
+        salt: Number(process.env.CRYPTOGRAPHY_SALT) || 10,
       },
     };
   }
