@@ -2,9 +2,9 @@ import App from '../src/App';
 import superTest from 'supertest';
 
 const app = new App();
-app.setup();
+
 beforeAll(async () => {
-  app.start();
+  await app.setup();
   global.testRequest = superTest(app.getApp());
 });
 
