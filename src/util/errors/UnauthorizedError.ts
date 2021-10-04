@@ -1,9 +1,10 @@
 import { ApplicationError } from './ApplicationError';
 import httpStatus from 'http-status-codes';
-export default class SchemaValidationError extends ApplicationError {
+
+export class UnauthorizedError extends ApplicationError {
   constructor(
     public message: string,
-    public statusCode: number = httpStatus.BAD_REQUEST
+    public statusCode: number = httpStatus.UNAUTHORIZED
   ) {
     super(message, statusCode);
   }

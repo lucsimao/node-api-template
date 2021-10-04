@@ -1,10 +1,11 @@
 import { ApplicationError } from './ApplicationError';
 import httpStatus from 'http-status-codes';
-export default class SchemaValidationError extends ApplicationError {
+
+export class DuplicationError extends ApplicationError {
   constructor(
-    public message: string,
+    public key: string,
     public statusCode: number = httpStatus.BAD_REQUEST
   ) {
-    super(message, statusCode);
+    super(`${key} já existente`, statusCode);
   }
 }
