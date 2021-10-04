@@ -22,7 +22,7 @@ class Envs {
     return {
       port: Number(process.env.APP_PORT) || 3333,
       logger: {
-        enabled: Boolean(process.env.LOGGER_ENABLED) || true,
+        enabled: Boolean(process.env.LOGGER_ENABLED) || false,
       },
       database: {
         address: process.env.DATABASE_ADDRESS || 'localhost',

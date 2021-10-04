@@ -1,5 +1,11 @@
 export interface IHttpRequest {
-  headers?: unknown;
-  params?: unknown;
+  headers?: {
+    authorization?: string;
+    [key: string]: unknown;
+  };
+  params?: {
+    id?: string;
+    [key: string]: unknown;
+  };
   body: unknown;
 }

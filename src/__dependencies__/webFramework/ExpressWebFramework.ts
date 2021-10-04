@@ -1,13 +1,18 @@
+import {
+  IMiddleware,
+  IWebFramework,
+} from '../../util/webFramework/framework/WebFramework';
 import express, { Application, Request, Response, Router } from 'express';
 
-import { IController } from '../../interfaces/IController';
+import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
-import { IWebFramework } from '../../util/webFramework/framework/WebFramework';
+import { Server } from 'http';
 
 export default class ExpressWebFramework
   implements IWebFramework<(req: Request, res: Response) => Promise<void>>
 {
   private application: Application;
+  private server?: Server;
 
   constructor() {
     this.application = express();
@@ -15,17 +20,22 @@ export default class ExpressWebFramework
   }
 
   public startServer(port: number, callback: () => void): void {
-    this.application.listen(port, callback);
+    this.server = this.application.listen(port, callback);
   }
 
-  public addMiddleware(
-    middleware: (req: Request, res: Response) => Promise<void>
-  ): void {
-    this.application.use(middleware);
+  public addMiddleware(middleware: IMiddleware): void {
+    const expressMiddleware = async (
+      req: Request,
+      res: Response
+    ): Promise<void> => {
+      const result = await middleware.executeMiddleware(req);
+      await res.status(result.statusCode).json(result.body);
+    };
+    this.application.use(expressMiddleware);
   }
 
-  public closeServer(): void {
-    throw new Error('Method not implemented.');
+  public async closeServer(): Promise<void> {
+    await this.server?.close();
   }
 
   public get(
@@ -47,12 +57,12 @@ export default class ExpressWebFramework
   }
 
   public execController(
-    controller: IController
+    controller: BaseController
   ): (req: Request, res: Response) => Promise<void> {
     return async (req: Request, res: Response) => {
       const httpRequest = this.getHttpRequest(req);
 
-      const httpResponse = await controller.executeRoute(httpRequest);
+      const httpResponse = await controller.execute(httpRequest);
 
       res.status(httpResponse.statusCode).json(httpResponse.body);
     };

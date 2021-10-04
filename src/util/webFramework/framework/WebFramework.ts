@@ -1,7 +1,11 @@
-import { IController } from '../../../interfaces/IController';
-
+import { BaseController } from '../../../abstracts/BaseController';
+import { IHttpRequest } from '../../../interfaces/IHttpRequest';
+import { IHttpResponse } from '../../../interfaces/IHttpResponse';
+export interface IMiddleware {
+  executeMiddleware(httpRequest: IHttpRequest): Promise<IHttpResponse>;
+}
 export interface IWebFramework<T> {
-  addMiddleware(middleware: T): void;
+  addMiddleware(middleware: IMiddleware): void;
 
   startServer(port: number, callback: () => void): void;
 
@@ -11,5 +15,5 @@ export interface IWebFramework<T> {
 
   closeServer(): void;
 
-  execController(controller: IController): T;
+  execController(controller: BaseController): T;
 }

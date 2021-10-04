@@ -10,16 +10,16 @@ export enum ExitStatus {
 export default class Main {
   public static async start(): Promise<void> {
     try {
-      this.initServices();
+      await this.initServices();
     } catch (error) {
       Logger.error({ msg: `App exited with error: ${error}` });
       process.exit(ExitStatus.Failure);
     }
   }
 
-  private static initServices() {
+  private static async initServices() {
     const app = new App(Number(Env.app.port));
-    app.setup();
+    await app.setup();
     app.start();
     this.setupUncaughtExceptions();
     this.setupUnhandledRejection();
