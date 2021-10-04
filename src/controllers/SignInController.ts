@@ -1,12 +1,10 @@
-import { IController } from '../interfaces/IController';
+import { BaseController } from '../abstracts/BaseController';
 import { IHttpRequest } from '../interfaces/IHttpRequest';
 import { IHttpResponse } from '../interfaces/IHttpResponse';
+import SignInProvider from '../providers/SignInProvider';
 
-export class SignInController implements IController {
+export class SignInController extends BaseController {
   public async executeRoute(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    return {
-      statusCode: 200 || httpRequest,
-      body: `Olá, este é meu primeiro get com meu novo template.`,
-    };
+    return await SignInProvider.authenticateUser(httpRequest);
   }
 }

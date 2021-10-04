@@ -1,8 +1,8 @@
-import { IController } from '../interfaces/IController';
-import { UsersController } from '../controllers/UsersController';
+import { BaseController } from '../abstracts/BaseController';
+import { UsersControllers } from '../controllers/UsersController';
 
 export default class UsersControllerFactory {
-  public static getController(): IController {
-    return new UsersController();
+  public static getController(): BaseController {
+    return new UsersControllers();
   }
 }
