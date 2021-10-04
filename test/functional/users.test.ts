@@ -13,6 +13,18 @@ describe('SignUp Tests', () => {
     ],
   };
 
+  const defaultUser2 = {
+    nome: 'John Users2',
+    email: 'john_users2@gmail.com',
+    senha: 'users@1232',
+    telefones: [
+      {
+        numero: '875452123',
+        ddd: '11',
+      },
+    ],
+  };
+
   let token: string | undefined;
   let id: string | undefined;
 
@@ -49,6 +61,21 @@ describe('SignUp Tests', () => {
       const response = await global.testRequest
         .get(`/users/${id}`)
         .set({ authorization: `Bearer ` });
+
+      expect(response.body).toEqual({ message: 'Não Autorizado' });
+      expect(response.status).toBe(401);
+    });
+
+    it('should return 400 when receive a token of another user', async () => {
+      await global.testRequest.post('/signup').send(defaultUser2);
+      const user = await UserRepository.findOne({
+        email: defaultUser2.email,
+      });
+      id = user?.id;
+
+      const response = await global.testRequest
+        .get(`/users/${id}`)
+        .set({ authorization: `Bearer ${token}` });
 
       expect(response.body).toEqual({ message: 'Não Autorizado' });
       expect(response.status).toBe(401);
