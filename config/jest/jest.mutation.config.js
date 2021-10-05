@@ -12,6 +12,7 @@ module.exports = {
   ...{
     rootDir: root,
     displayName: 'mutation-tests',
+    setupFilesAfterEnv: ['<rootDir>/config/jest/jest-setup.ts'],
     testMatch: ['**/src/**/*.test.ts'],
   },
 };

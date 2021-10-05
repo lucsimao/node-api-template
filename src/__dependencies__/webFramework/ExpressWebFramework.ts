@@ -2,7 +2,7 @@ import {
   IMiddleware,
   IWebFramework,
 } from '../../util/webFramework/framework/WebFramework';
-import express, { Application, Request, Response, Router } from 'express';
+import express, { Application, Request, Response } from 'express';
 
 import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
@@ -19,7 +19,7 @@ export default class ExpressWebFramework
     this.application.use(express.json());
   }
 
-  public startServer(port: number, callback: () => void): void {
+  public startServer(port: number, callback?: () => void): void {
     this.server = this.application.listen(port, callback);
   }
 
@@ -42,7 +42,7 @@ export default class ExpressWebFramework
     route: string,
     ...webMiddlewares: ((req: Request, res: Response) => Promise<void>)[]
   ): void {
-    const router = Router();
+    const router = express.Router();
     router.get(route, webMiddlewares);
     this.application.use(router);
   }
@@ -51,7 +51,7 @@ export default class ExpressWebFramework
     route: string,
     ...webMiddlewares: ((req: Request, res: Response) => Promise<void>)[]
   ): void {
-    const router = Router();
+    const router = express.Router();
     router.post(route, webMiddlewares);
     this.application.use(router);
   }

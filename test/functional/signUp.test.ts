@@ -7,8 +7,8 @@ describe('SignUp Tests', () => {
     senha: 'signup@123',
     telefones: [
       {
-        numero: '875452123',
         ddd: '11',
+        numero: '875452123',
       },
     ],
   };
@@ -30,7 +30,12 @@ describe('SignUp Tests', () => {
         id: expect.stringContaining(''),
         nome: defaultUser.nome,
         senha: expect.stringContaining(''),
-        telefones: [{ ddd: '11', numero: '875452123' }],
+        telefones: [
+          {
+            ddd: '11',
+            numero: '875452123',
+          },
+        ],
         token: expect.stringContaining(''),
         ultimo_login: expect.stringContaining(''),
       });

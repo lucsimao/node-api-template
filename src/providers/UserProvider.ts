@@ -1,3 +1,4 @@
+import AuthService from '../services/AuthService';
 import { IHttpRequest } from '../interfaces/IHttpRequest';
 import { IHttpResponse } from '../interfaces/IHttpResponse';
 import { IUser } from '../models/user/IUser';
@@ -10,21 +11,38 @@ export class UserProvider {
   public static async getUser(
     httpRequest: IHttpRequest
   ): Promise<IHttpResponse> {
-    const id = httpRequest.params?.id;
-    const token = httpRequest.headers?.authorization;
+    const [id, token] = this.validateTokenAndId(httpRequest);
 
-    if (!id || !token) {
-      Logger.error({ msg: 'id do usuário ou token não fornecidos' });
-      throw new UnauthorizedError('Sessão inválida');
-    }
-
-    const [, tokenBody] = token.split(' ');
+    const tokenBody = this.extractTokenBody(token);
 
     const user = await this.findUser(id, tokenBody);
+
     return {
       statusCode: httpStatus.OK,
       body: user,
     };
+  }
+
+  private static validateTokenAndId(
+    httpRequest: IHttpRequest
+  ): [string, string] {
+    const id = httpRequest.params?.id;
+    const token = httpRequest.headers?.authorization;
+    if (!id || !token) {
+      Logger.error({ msg: 'id do usuário ou token não fornecidos' });
+      throw new UnauthorizedError('Sessão inválida');
+    }
+    return [id, token];
+  }
+
+  private static extractTokenBody(token: string): string {
+    try {
+      const [, tokenBody] = token.split(' ');
+      AuthService.decodeToken(tokenBody);
+      return tokenBody;
+    } catch (_) {
+      throw new UnauthorizedError('Não Autorizado');
+    }
   }
 
   private static async findUser(userId: string, token: string): Promise<IUser> {
@@ -51,7 +69,7 @@ export class UserProvider {
   private static checkIfTheDateHasBeenPassedInMinutes(
     referenceDate: string,
     limit = 30
-  ) {
+  ): boolean {
     const actualDate = new Date().toLocaleTimeString();
 
     const diffInMinutes = differenceInMinutes(

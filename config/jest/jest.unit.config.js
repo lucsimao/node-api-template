@@ -11,6 +11,7 @@ module.exports = {
     displayName: 'unit-tests',
     testMatch: ['<rootDir>/src/**/*.test.ts'],
     collectCoverage: true,
-    collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts'],
+    setupFilesAfterEnv: ['<rootDir>/config/jest/jest-setup.ts'],
+    collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts', '!src/index.ts'],
   },
 };
