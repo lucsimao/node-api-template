@@ -12,9 +12,9 @@ export interface IUser {
   email: string;
   senha: string;
   telefones: Phones;
-  id: string;
-  data_criacao: string;
-  data_atualizacao: string;
-  ultimo_login: string;
+  id?: string;
+  data_criacao?: string;
+  data_atualizacao?: string;
+  ultimo_login?: string;
   token?: string;
 }

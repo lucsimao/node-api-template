@@ -17,23 +17,35 @@ export class SignUpProvider {
 
     const token = AuthService.generateUserToken(validatedUserData);
 
-    const senha = await EncryptService.generateHash(user.senha);
-    user.senha = senha;
+    await this.verifyDuplicatedEmail(user);
 
-    const userInDatabase = await userRepository.findOne({ email: user.email });
+    await this.setHashedPassword(user);
 
-    if (userInDatabase) {
+    const result = await this.createUserInDatabase(user, token);
+
+    return {
+      statusCode: httpStatus.CREATED,
+      body: result,
+    };
+  }
+
+  private static async verifyDuplicatedEmail(user: IUser) {
+    const result = await userRepository.findOne({ email: user.email });
+
+    if (result) {
       throw new DuplicationError('Email');
     }
+  }
 
-    const result = await userRepository.create({
+  private static async setHashedPassword(user: IUser) {
+    const senha = await EncryptService.generateHash(user.senha);
+    user.senha = senha;
+  }
+
+  private static async createUserInDatabase(user: IUser, token: string) {
+    return await userRepository.create({
       ...user,
       token,
     });
-
-    return {
-      body: result,
-      statusCode: httpStatus.CREATED,
-    };
   }
 }

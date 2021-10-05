@@ -1,6 +1,6 @@
 import Env from './config/Env';
 import Logger from './util/logger';
-import database from './databases/persistence';
+import database from './databases/persistenceDataBase';
 import notFoundMiddleware from './middlewares/NotFoundMiddleware';
 import routes from './routes';
 import webFramework from './util/webFramework/framework';

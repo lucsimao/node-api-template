@@ -8,9 +8,6 @@ export class JoiSchema implements ISchema<AnySchema> {
   string(): AnySchema {
     return Joi.string();
   }
-  number(): AnySchema {
-    return Joi.number();
-  }
   email(): AnySchema {
     return Joi.string().email();
   }

@@ -3,7 +3,8 @@
   "packageManager": "yarn",
   "reporters": ["html", "clear-text", "progress", "dashboard"],
   "mutate": [
-    "{src,lib}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|jsx|tsx|html|vue)"
+    "{src,lib}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|jsx|tsx|html|vue)",
+    "!src/index.ts"
   ],
   "jest": {
     "projectType": "custom",

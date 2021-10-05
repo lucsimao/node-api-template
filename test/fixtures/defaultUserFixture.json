@@ -1,0 +1,11 @@
+{
+  "nome": "John SignIn",
+  "email": "john_users@gmail.com",
+  "senha": "signIn@123",
+  "telefones": [
+    {
+      "numero": "875452123",
+      "ddd": "11"
+    }
+  ]
+}

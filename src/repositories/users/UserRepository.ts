@@ -1,13 +1,12 @@
 import { DatabaseError } from '../../util/errors/DatabaseError';
 import { IRepository } from '../IRepository';
-import { IRepositoryModel } from '../repositoryModel/IRepositoryModel';
 import { IUser } from '../../models/user/IUser';
 import httpStatus from 'http-status-codes';
-export class UserRepository implements IRepository<IUser> {
-  constructor(private readonly UserRepositoryModel: IRepositoryModel<IUser>) {}
+import repositoryModel from '../../__dependencies__/database/persistenceDatabase/repositoryModel';
 
+export class UserRepository implements IRepository<IUser> {
   public async create(user: IUser): Promise<IUser> {
-    const result = await this.UserRepositoryModel.save(user);
+    const result = await repositoryModel.save(user);
 
     if (!result) {
       throw new DatabaseError(
@@ -23,7 +22,7 @@ export class UserRepository implements IRepository<IUser> {
     property: Partial<IUser>,
     user: Partial<IUser>
   ): Promise<IUser> {
-    const result = await this.UserRepositoryModel.updateOne(property, user);
+    const result = await repositoryModel.updateOne(property, user);
 
     if (!result) {
       throw new DatabaseError(
@@ -36,17 +35,17 @@ export class UserRepository implements IRepository<IUser> {
   }
 
   public async findOne(user: Partial<IUser>): Promise<IUser | undefined> {
-    return await this.UserRepositoryModel.findOne(user);
+    return await repositoryModel.findOne(user);
   }
 
   public async deleteAll(): Promise<void> {
-    await this.UserRepositoryModel.deleteAll();
+    await repositoryModel.deleteAll();
   }
 
   public async findOneByIdAndToken(
     userId: string,
     token: string
   ): Promise<IUser | undefined> {
-    return this.UserRepositoryModel.findOneByIdAndToken(userId, token);
+    return repositoryModel.findOneByIdAndToken(userId, token);
   }
 }
