@@ -1,4 +1,8 @@
-name: Deployment Complete Workflow
+name: Release Workflow
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  DATABASE_USERNAME: root
+  DATABASE_PASSWORD: my_password
 
 on:
   push:
@@ -11,6 +15,21 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+
+    services:
+      mongodb:
+        image: mongo:4.4.5
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ${{ env.DATABASE_USERNAME }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+        ports:
+          - 27017
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
 
@@ -26,6 +45,11 @@ jobs:
         run: yarn lint && yarn style:check
 
       - name: Run all tests
+        env:
+          DATABASE_ADDRESS: localhost
+          DATABASE_USERNAME: ${{ env.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+          DATABASE_PORT: ${{ job.services.mongodb.ports[27017] }}
         run: yarn test
 
       - name: Run mutation tests

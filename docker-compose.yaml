@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  mongodb_container:
+    container_name: mongo
+    image: mongo:latest
+    env_file:
+      - .env-test
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
