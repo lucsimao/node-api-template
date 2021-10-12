@@ -1,18 +1,83 @@
 version: '2'
 
 services:
-  mongodb_container:
+  mongodb:
     container_name: mongo
     image: mongo:latest
     env_file:
       - .env-test
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: my_password
     ports:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
 
+  prometheus:
+    image: prom/prometheus:v2.17.1
+    container_name: prometheus
+    volumes:
+      - ./config/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    ports:
+      - '9090:9090'
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  alertmanager:
+    image: prom/alertmanager:v0.20.0
+    container_name: alertmanager
+    volumes:
+      - ./config/alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    ports:
+      - 9093:9093
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  grafana:
+    image: grafana/grafana:6.7.2
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  app:
+    env_file:
+      - .env-test
+    container_name: app
+    build: .
+    environment:
+      - APP_PORT=8080
+    command: npm start
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
+
 volumes:
   mongodb_data_container:
+  prometheus_data:
+  grafana_data:

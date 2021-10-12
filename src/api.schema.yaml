@@ -1,204 +1,180 @@
 openapi: 3.0.1
-
 info:
   version: 1.0.0
-  title: Testlink Facade
-  description: Testlink Facade Api
-  termsOfService: 'https://github.com/lucsimao/testlink-facade-api'
+  title: Node Api Template
+  description: Service to create. authenticate and get user information
+  termsOfService: 'https://github.com/lucsimao/node-api-template'
   contact:
     email: lucasimao64@gmail.com
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://github.com/lucsimao/node-api-template
+    description: Production Server
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: Users
+    description: users endpoints
 components:
   securitySchemes:
     apiKey:
-      type: apiKey
-      name: x-access-token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
       in: header
-
-  parameters:
-    TestlinkApiKey:
-      in: header
-      name: testlink-api-key
-      schema:
-        $ref: '#/components/schemas/testlink-api-key'
-      required: true
-    TestlinkPort:
-      in: header
-      name: testlink-port
-      schema:
-        $ref: '#/components/schemas/testlink-port'
-      required: true
-    TestlinkUrl:
-      in: header
-      name: testlink-url
-      schema:
-        $ref: '#/components/schemas/testlink-url'
-      required: true
-    TestPlanId:
-      in: header
-      name: test-plan-id
-      schema:
-        $ref: '#/components/schemas/test-plan-id'
-      required: true
-    TestProjectId:
-      in: header
-      name: test-project-id
-      schema:
-        $ref: '#/components/schemas/test-project-id'
-      required: true
-    TestSuiteId:
-      in: header
-      name: test-suite-id
-      schema:
-        $ref: '#/components/schemas/test-suite-id'
-
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-
   schemas:
-    testlink-api-key:
+    ultimo_login:
       type: string
-      example: 6e204ef53aecd003c19f2a89178ba60b
-    testlink-url:
+      example: 2020-09-27T23:24:25.925Z
+    data_atualizacao:
       type: string
-      example: localhost
-    testlink-port:
-      type: number
-      example: 80
+      example: 2020-09-27T23:24:25.925Z
+    data_criacao:
+      type: string
+      example: 2020-09-27T23:24:25.925Z
+    jwtToken:
+      type: string
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP
+    nome:
+      type: string
+      example: John Doe
+    email:
+      type: string
+      example: john@mail.com
+    senha:
+      type: string
+      example: 12345#@$$%
+    numero:
+      type: string
+      example: '123456789'
+    ddd:
+      type: string
+      example: '11'
     id:
-      type: number
-      example: 1
-    name:
       type: string
-      example: name-example
-    notes:
+      example: 5e8131eba7768d9e4f06c884
+    mensagem:
       type: string
-      example: notes-example
-    test-plan-id:
-      type: number
-      example: 2
-    test-project-id:
-      type: number
-      example: 1
-    test-suite-id:
-      type: number
-      example: 3
-    externalId:
-      type: string
-      example: tpe--1
-    summary:
-      type: string
-      example: example summary
-    preconditions:
-      type: string
-      example: example preconditions
-
+      example: Sessão Inválida
+    User:
+      type: object
+      properties:
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        telefones:
+          type: array
+          items:
+            type: object
+            properties:
+              numero:
+                '$ref': '#/components/schemas/numero'
+              ddd:
+                '$ref': '#/components/schemas/ddd'
+      required:
+        - nome
+        - email
+        - senha
+        - telefones
+    UserAuth:
+      type: object
+      properties:
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+      required:
+        - email
+        - senha
+    UserCreatedResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
+    AuthenticatedUserResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
+    UserProfileResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
     Error:
       type: object
       properties:
-        message:
+        mensagem:
           type: string
-        code:
-          type: number
-        error:
+          example: 'Error genérico'
+    AuthenticationError:
+      type: object
+      properties:
+        mensagem:
           type: string
-        description:
+          example: 'Não Autorizado'
+    NotFoundError:
+      type: object
+      properties:
+        mensagem:
           type: string
-        documentation:
+          example: 'Not Found'
+    InternalServerError:
+      type: object
+      properties:
+        mensagem:
           type: string
-      example:
-        message: Internal Server Error
-        code: '500'
-        error: Internal Server Error
-    Builds:
-      type: array
-      items:
-        properties:
-          id:
-            $ref: '#/components/schemas/id'
-          name:
-            $ref: '#/components/schemas/name'
-          notes:
-            $ref: '#/components/schemas/notes'
-          testPlanId:
-            $ref: '#/components/schemas/id'
-    TestCases:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/id'
-          externalId:
-            $ref: '#/components/schemas/externalId'
-          name:
-            $ref: '#/components/schemas/name'
-          summary:
-            $ref: '#/components/schemas/summary'
-          preconditions:
-            $ref: '#/components/schemas/preconditions'
-    TestProjects:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/id'
-          name:
-            $ref: '#/components/schemas/name'
-          prefix:
-            type: string
-            example: tce-
-          apiKey:
-            $ref: '#/components/schemas/testlink-api-key'
-    TestPlans:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/id'
-          name:
-            $ref: '#/components/schemas/name'
-          testProjectId:
-            $ref: '#/components/schemas/id'
-          apiKey:
-            $ref: '#/components/schemas/testlink-api-key'
-          notes:
-            $ref: '#/components/schemas/notes'
-    TestSuites:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/id'
-          name:
-            $ref: '#/components/schemas/name'
-          parentId:
-            $ref: '#/components/schemas/id'
+          example: 'Internal Server Error'
+    TooManyRequestsServerError:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Too many requests'
