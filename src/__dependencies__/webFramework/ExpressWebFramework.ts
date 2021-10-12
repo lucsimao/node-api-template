@@ -6,6 +6,7 @@ import express, { Application, Request, Response } from 'express';
 
 import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
+import { RateLimit } from 'express-rate-limit';
 import { Server } from 'http';
 
 export default class ExpressWebFramework
@@ -25,9 +26,7 @@ export default class ExpressWebFramework
 
   public addMiddleware(middlewareFactory: IMiddlewareFactory): void {
     const middleware = middlewareFactory.getMiddleware();
-    this.application.use(
-      middleware.exec() as (req: Request, res: Response) => Promise<void>
-    );
+    this.application.use(middleware.exec() as RateLimit);
   }
 
   public async closeServer(): Promise<void> {

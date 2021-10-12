@@ -14,6 +14,10 @@ interface IAppEnv {
     expiration: string;
   };
   cryptography: { salt: number };
+  rateLimiter: {
+    maxRequests: number;
+    maxInterval: number;
+  };
 }
 
 class Envs {
@@ -43,6 +47,11 @@ class Envs {
       },
       cryptography: {
         salt: Number(process.env.CRYPTOGRAPHY_SALT) || 10,
+      },
+      rateLimiter: {
+        maxRequests: Number(process.env.RATE_LIMITER_MAX_REQUESTS) || 10,
+        maxInterval:
+          Number(process.env.RATE_LIMITER_MAX_INTERVAL) || 1 * 60 * 1000,
       },
     };
   }

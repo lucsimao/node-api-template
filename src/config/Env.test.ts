@@ -19,6 +19,10 @@ describe('Env tests', () => {
       },
       logger: { enabled: false },
       port: 3333,
+      rateLimiter: {
+        maxInterval: 60000,
+        maxRequests: 10,
+      },
     });
   });
 });
