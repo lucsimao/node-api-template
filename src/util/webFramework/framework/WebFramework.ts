@@ -1,11 +1,15 @@
 import { BaseController } from '../../../abstracts/BaseController';
-import { IHttpRequest } from '../../../interfaces/IHttpRequest';
-import { IHttpResponse } from '../../../interfaces/IHttpResponse';
-export interface IMiddleware {
-  executeMiddleware(httpRequest: IHttpRequest): Promise<IHttpResponse>;
+
+export interface IMiddleware<T> {
+  exec(): T;
 }
+
+export interface IMiddlewareFactory {
+  getMiddleware(): IMiddleware<unknown>;
+}
+
 export interface IWebFramework<T> {
-  addMiddleware(middleware: IMiddleware): void;
+  addMiddleware(middleware: IMiddlewareFactory): void;
 
   startServer(port: number, callback: () => void): void;
 

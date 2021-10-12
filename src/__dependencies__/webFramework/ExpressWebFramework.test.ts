@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Request, Response } from 'express';
 
-import { IMiddleware } from '../../util/webFramework/framework/WebFramework';
 import { UsersControllers } from '../../controllers/UsersController';
 import expressFramework from './index';
 
@@ -65,12 +64,12 @@ describe('ExpressFramework Tests', () => {
       const use = jest.spyOn(express(), 'use');
 
       expressFramework.addMiddleware({
-        executeMiddleware: jest
-          .fn()
-          .mockReturnValue({ statusCode: 0, body: 'Fake Body' }),
-      } as IMiddleware);
+        getMiddleware: jest.fn().mockReturnValue({
+          exec: () => ({ statusCode: 0, body: 'Fake Body' }),
+        }),
+      } as any);
 
-      expect(use).toBeCalledWith(expect.any(Function));
+      expect(use).toBeCalledWith({ body: 'Fake Body', statusCode: 0 });
     });
   });
 

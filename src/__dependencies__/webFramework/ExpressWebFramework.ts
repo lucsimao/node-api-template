@@ -1,5 +1,5 @@
 import {
-  IMiddleware,
+  IMiddlewareFactory,
   IWebFramework,
 } from '../../util/webFramework/framework/WebFramework';
 import express, { Application, Request, Response } from 'express';
@@ -23,15 +23,11 @@ export default class ExpressWebFramework
     this.server = this.application.listen(port, callback);
   }
 
-  public addMiddleware(middleware: IMiddleware): void {
-    const expressMiddleware = async (
-      req: Request,
-      res: Response
-    ): Promise<void> => {
-      const result = await middleware.executeMiddleware(req);
-      await res.status(result.statusCode).json(result.body);
-    };
-    this.application.use(expressMiddleware);
+  public addMiddleware(middlewareFactory: IMiddlewareFactory): void {
+    const middleware = middlewareFactory.getMiddleware();
+    this.application.use(
+      middleware.exec() as (req: Request, res: Response) => Promise<void>
+    );
   }
 
   public async closeServer(): Promise<void> {
