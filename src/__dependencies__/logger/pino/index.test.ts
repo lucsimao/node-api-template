@@ -15,7 +15,7 @@ describe('Pino Tests', () => {
     it('should call pino when constructor is called by the first time', () => {
       (PinoLogger as any).pinoLogger = undefined;
       PinoLogger.getInstance();
-      expect(pino).toBeCalledWith({ enabled: false });
+      expect(pino).toBeCalledWith();
       expect(pino).toBeCalledTimes(1);
     });
   });

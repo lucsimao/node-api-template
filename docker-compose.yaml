@@ -5,7 +5,7 @@ services:
     container_name: mongo
     image: mongo:latest
     env_file:
-      - test.env
+      - envs/container.env
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: my_password
@@ -90,7 +90,7 @@ services:
 
   app:
     env_file:
-      - test.env
+      - envs/container.env
     container_name: app
     build: .
     environment:
