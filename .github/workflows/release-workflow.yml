@@ -52,10 +52,10 @@ jobs:
           DATABASE_PORT: ${{ job.services.mongodb.ports[27017] }}
         run: yarn test
 
-      - name: Run mutation tests
-        run: yarn test:mutation
-        env:
-          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+      # - name: Run mutation tests
+      #   run: yarn test:mutation
+      #   env:
+      #     STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
   release:
     needs: build
