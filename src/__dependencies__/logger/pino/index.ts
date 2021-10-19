@@ -1,6 +1,5 @@
 import { ILogger, ILoggerParams } from '../../../util/logger/ILogger';
 
-import Env from '../../../config/Env';
 import pino from 'pino';
 
 export default class PinoLogger implements ILogger {
@@ -8,9 +7,7 @@ export default class PinoLogger implements ILogger {
   private pino;
 
   private constructor() {
-    this.pino = pino({
-      enabled: Env.app.logger.enabled,
-    });
+    this.pino = pino();
   }
 
   public static getInstance(): PinoLogger {

@@ -1,6 +1,13 @@
 interface IAppEnv {
   port: number;
-  logger: { enabled: boolean };
+  logger: {
+    options: string[];
+    elasticSearch: {
+      url: string;
+      port: number;
+      version: string;
+    };
+  };
   database: {
     address: string;
     username: string;
@@ -31,7 +38,12 @@ class Envs {
     return {
       port: Number(process.env.APP_PORT) || 3333,
       logger: {
-        enabled: Boolean(process.env.LOGGER_ENABLED) || false,
+        options: (process.env.LOGGER_OPTIONS || '').split(','),
+        elasticSearch: {
+          url: process.env.ELASTIC_SEARCH_URL || 'localhost',
+          port: Number(process.env.ELASTIC_SEARCH_PORT) || 9200,
+          version: process.env.ELASTIC_SEARCH_API_VERSION || '7.x',
+        },
       },
       database: {
         address: process.env.DATABASE_ADDRESS || 'localhost',
