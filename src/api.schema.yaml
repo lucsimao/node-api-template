@@ -1,0 +1,180 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Node Api Template
+  description: Service to create. authenticate and get user information
+  termsOfService: 'https://github.com/lucsimao/node-api-template'
+  contact:
+    email: lucasimao64@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://github.com/lucsimao/node-api-template
+    description: Production Server
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: Users
+    description: users endpoints
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
+  schemas:
+    ultimo_login:
+      type: string
+      example: 2020-09-27T23:24:25.925Z
+    data_atualizacao:
+      type: string
+      example: 2020-09-27T23:24:25.925Z
+    data_criacao:
+      type: string
+      example: 2020-09-27T23:24:25.925Z
+    jwtToken:
+      type: string
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP
+    nome:
+      type: string
+      example: John Doe
+    email:
+      type: string
+      example: john@mail.com
+    senha:
+      type: string
+      example: 12345#@$$%
+    numero:
+      type: string
+      example: '123456789'
+    ddd:
+      type: string
+      example: '11'
+    id:
+      type: string
+      example: 5e8131eba7768d9e4f06c884
+    mensagem:
+      type: string
+      example: Sessão Inválida
+    User:
+      type: object
+      properties:
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        telefones:
+          type: array
+          items:
+            type: object
+            properties:
+              numero:
+                '$ref': '#/components/schemas/numero'
+              ddd:
+                '$ref': '#/components/schemas/ddd'
+      required:
+        - nome
+        - email
+        - senha
+        - telefones
+    UserAuth:
+      type: object
+      properties:
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+      required:
+        - email
+        - senha
+    UserCreatedResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
+    AuthenticatedUserResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
+    UserProfileResponse:
+      type: object
+      properties:
+        id:
+          '$ref': '#/components/schemas/id'
+        nome:
+          '$ref': '#/components/schemas/nome'
+        email:
+          '$ref': '#/components/schemas/email'
+        senha:
+          '$ref': '#/components/schemas/senha'
+        token:
+          '$ref': '#/components/schemas/jwtToken'
+        ultimo_login:
+          '$ref': '#/components/schemas/ultimo_login'
+        data_atualizacao:
+          '$ref': '#/components/schemas/data_atualizacao'
+        data_criacao:
+          '$ref': '#/components/schemas/data_criacao'
+    Error:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Error genérico'
+    AuthenticationError:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Não Autorizado'
+    NotFoundError:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Not Found'
+    InternalServerError:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Internal Server Error'
+    TooManyRequestsServerError:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: 'Too many requests'

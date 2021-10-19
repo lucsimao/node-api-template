@@ -2,7 +2,9 @@ import Env from './config/Env';
 import Logger from './util/logger';
 import database from './databases/persistenceDataBase';
 import notFoundMiddleware from './middlewares/NotFoundMiddleware';
+import rateLimiterMiddleware from './middlewares/RateLimiterMiddleware';
 import routes from './routes';
+import swaggerMiddleware from './middlewares/SwaggerMiddleware';
 import webFramework from './util/webFramework/framework';
 
 export default class App {
@@ -28,6 +30,8 @@ export default class App {
 
   public setupMiddlewares(): void {
     Logger.info({ msg: 'Starting routes setup...' });
+    this.application.addMiddleware(rateLimiterMiddleware);
+    this.application.addMiddleware(swaggerMiddleware);
     routes.setup(this.application);
     this.application.addMiddleware(notFoundMiddleware);
     Logger.info({ msg: 'Finished routes setup' });

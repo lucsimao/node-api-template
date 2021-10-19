@@ -17,8 +17,19 @@ describe('Env tests', () => {
         ssl: 'false',
         username: process.env.DATABASE_USERNAME,
       },
-      logger: { enabled: false },
+      logger: {
+        elasticSearch: {
+          port: 9200,
+          url: 'elasticsearch',
+          version: '7.x',
+        },
+        options: [''],
+      },
       port: 3333,
+      rateLimiter: {
+        maxInterval: 60000,
+        maxRequests: 10,
+      },
     });
   });
 });

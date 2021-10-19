@@ -1,15 +1,26 @@
+import {
+  IMiddleware,
+  IMiddlewareFactory,
+} from '../util/webFramework/framework/WebFramework';
+
+import { GenericMiddleware } from '../__dependencies__/webFramework/GenericMiddleware';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { IHttpRequest } from '../interfaces/IHttpRequest';
 import { IHttpResponse } from '../interfaces/IHttpResponse';
-import { IMiddleware } from '../util/webFramework/framework/WebFramework';
 import httpStatus from 'http-status-codes';
 
-class NotFoundMiddleware implements IMiddleware {
-  async executeMiddleware(_: IHttpRequest): Promise<IHttpResponse> {
-    return {
+class NotFoundMiddleware implements IMiddlewareFactory {
+  private middleware;
+
+  constructor() {
+    this.middleware = new GenericMiddleware(() => ({
       statusCode: httpStatus.NOT_FOUND,
-      body: `Not found`,
-    };
+      body: { message: 'Not found' },
+    }));
+  }
+
+  getMiddleware(): IMiddleware<unknown> {
+    return this.middleware;
   }
 }
 
