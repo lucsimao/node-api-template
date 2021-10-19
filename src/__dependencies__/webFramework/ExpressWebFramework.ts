@@ -1,11 +1,12 @@
 import {
-  IMiddleware,
+  IMiddlewareFactory,
   IWebFramework,
 } from '../../util/webFramework/framework/WebFramework';
 import express, { Application, Request, Response } from 'express';
 
 import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
+import { RateLimit } from 'express-rate-limit';
 import { Server } from 'http';
 
 export default class ExpressWebFramework
@@ -23,15 +24,9 @@ export default class ExpressWebFramework
     this.server = this.application.listen(port, callback);
   }
 
-  public addMiddleware(middleware: IMiddleware): void {
-    const expressMiddleware = async (
-      req: Request,
-      res: Response
-    ): Promise<void> => {
-      const result = await middleware.executeMiddleware(req);
-      await res.status(result.statusCode).json(result.body);
-    };
-    this.application.use(expressMiddleware);
+  public addMiddleware(middlewareFactory: IMiddlewareFactory): void {
+    const middleware = middlewareFactory.getMiddleware();
+    this.application.use(middleware.exec() as RateLimit);
   }
 
   public async closeServer(): Promise<void> {
