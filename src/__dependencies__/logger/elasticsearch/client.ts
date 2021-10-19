@@ -1,6 +1,6 @@
 import elasticsearch, { Client } from 'elasticsearch';
 
-import Env from '../../../../config/Env';
+import Env from '../../../config/Env';
 
 const elasticSearchEnv = Env.app.logger.elasticSearch;
 

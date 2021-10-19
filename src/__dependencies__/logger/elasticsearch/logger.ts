@@ -1,4 +1,4 @@
-import { ILogger, ILoggerParams } from '../../../../util/logger/ILogger';
+import { ILogger, ILoggerParams } from '../../../util/logger/ILogger';
 
 import ElasticSearchService from './client';
 
