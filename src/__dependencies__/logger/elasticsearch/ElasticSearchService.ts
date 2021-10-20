@@ -3,7 +3,6 @@ import elasticsearch, { Client } from 'elasticsearch';
 import Env from '../../../config/Env';
 
 const elasticSearchEnv = Env.app.logger.elasticSearch;
-
 export interface ITransportParams {
   readonly index: string;
   readonly type: string;

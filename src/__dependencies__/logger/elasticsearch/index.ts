@@ -1,17 +1,9 @@
 import { ILogger, ILoggerParams } from '../../../util/logger/ILogger';
 
-import ElasticSearchService from './client';
+import ElasticSearchService from './ElasticSearchService';
 
 export class ElasticSearchLogger implements ILogger {
   private static elasticSearchLogger: ElasticSearchLogger;
-
-  private logToElastic(type: string, body: { [key: string]: unknown }) {
-    ElasticSearchService.log({
-      index: 'api',
-      type,
-      body: { ...body, timestamp: new Date().toString() },
-    });
-  }
 
   info(message: ILoggerParams): void {
     this.logToElastic('info', message);
@@ -21,6 +13,14 @@ export class ElasticSearchLogger implements ILogger {
   }
   error(message: ILoggerParams): void {
     this.logToElastic('error', message);
+  }
+
+  private logToElastic(type: string, body: { [key: string]: unknown }) {
+    ElasticSearchService.log({
+      index: 'api',
+      type,
+      body: { ...body, timestamp: new Date().toString() },
+    });
   }
 
   public static getInstance(): ElasticSearchLogger {
