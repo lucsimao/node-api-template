@@ -10,7 +10,7 @@
     "start": "node dist/src/index.js",
     "start:local": "dotenv -e .env -- ts-node-dev src/index.ts",
     "test": "yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
-    "test:unit": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.unit.config.js --coverage --detectOpenHandles ",
+    "test:unit": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.unit.config.js --coverage --detectOpenHandles",
     "test:functional": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.functional.config.js --forceExit --runInBand",
     "test:mutation": "dotenv -e envs/test.env -- stryker run",
     "lint": "eslint ./src ./test --ext .ts",
@@ -52,12 +52,12 @@
     "supertest": "^6.1.6",
     "ts-jest": "^27.0.4",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "dotenv-cli": "^4.0.0"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "date-fns": "^2.24.0",
-    "dotenv-cli": "^4.0.0",
     "elasticsearch": "^16.7.2",
     "express": "^4.17.1",
     "express-rate-limit": "^5.4.1",
