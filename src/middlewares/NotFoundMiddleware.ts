@@ -4,9 +4,6 @@ import {
 } from '../util/webFramework/framework/WebFramework';
 
 import { GenericMiddleware } from '../__dependencies__/webFramework/GenericMiddleware';
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { IHttpRequest } from '../interfaces/IHttpRequest';
-import { IHttpResponse } from '../interfaces/IHttpResponse';
 import httpStatus from 'http-status-codes';
 
 class NotFoundMiddleware implements IMiddlewareFactory {

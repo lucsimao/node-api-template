@@ -6,11 +6,14 @@ import express, { Application, Request, Response } from 'express';
 
 import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
-import { RateLimit } from 'express-rate-limit';
 import { Server } from 'http';
 
+export interface ExpressMiddlewareFunction {
+  (req: Request, res: Response): Promise<void>;
+}
+
 export default class ExpressWebFramework
-  implements IWebFramework<(req: Request, res: Response) => Promise<void>>
+  implements IWebFramework<ExpressMiddlewareFunction>
 {
   private application: Application;
   private server?: Server;
@@ -26,7 +29,7 @@ export default class ExpressWebFramework
 
   public addMiddleware(middlewareFactory: IMiddlewareFactory): void {
     const middleware = middlewareFactory.getMiddleware();
-    this.application.use(middleware.exec() as RateLimit);
+    this.application.use(middleware.exec() as ExpressMiddlewareFunction);
   }
 
   public async closeServer(): Promise<void> {
@@ -35,7 +38,7 @@ export default class ExpressWebFramework
 
   public get(
     route: string,
-    ...webMiddlewares: ((req: Request, res: Response) => Promise<void>)[]
+    ...webMiddlewares: ExpressMiddlewareFunction[]
   ): void {
     const router = express.Router();
     router.get(route, webMiddlewares);
@@ -44,16 +47,14 @@ export default class ExpressWebFramework
 
   public post(
     route: string,
-    ...webMiddlewares: ((req: Request, res: Response) => Promise<void>)[]
+    ...webMiddlewares: ExpressMiddlewareFunction[]
   ): void {
     const router = express.Router();
     router.post(route, webMiddlewares);
     this.application.use(router);
   }
 
-  public execController(
-    controller: BaseController
-  ): (req: Request, res: Response) => Promise<void> {
+  public execController(controller: BaseController): ExpressMiddlewareFunction {
     return async (req: Request, res: Response) => {
       const httpRequest = this.getHttpRequest(req);
 
