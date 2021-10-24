@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseController } from './BaseController';
-import { Error } from 'mongoose';
 import { IHttpRequest } from '../interfaces/IHttpRequest';
 import { IHttpResponse } from '../interfaces/IHttpResponse';
 
@@ -24,19 +23,6 @@ describe('BaseController Tests', () => {
       expect(result).toEqual({
         body: 'Fake Body [object Object]',
         statusCode: 900,
-      });
-    });
-    it('should call parseApplicationError when execute is called with a error', async () => {
-      jest
-        .spyOn(ConcreteController.prototype as any, 'executeRoute')
-        .mockImplementationOnce(() => {
-          throw new Error('Fake Error');
-        });
-      const controller = new ConcreteController();
-      const result = await controller.execute(fakeHttpRequest);
-      expect(result).toEqual({
-        body: { message: 'Fake Error' },
-        statusCode: 400,
       });
     });
   });

@@ -117,7 +117,11 @@ describe('ExpressFramework Tests', () => {
       const execute = jest.spyOn(UsersControllers.prototype, 'execute');
 
       const execution = expressFramework.execController(new UsersControllers());
-      execution(fakeReq as unknown as Request, fakeResp as unknown as Response);
+      execution(
+        fakeReq as unknown as Request,
+        fakeResp as unknown as Response,
+        () => ''
+      );
 
       expect(execute).toBeCalledWith({
         body: 'Fake Body',

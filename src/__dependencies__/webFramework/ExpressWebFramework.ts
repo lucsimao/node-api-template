@@ -2,16 +2,26 @@ import {
   IMiddlewareFactory,
   IWebFramework,
 } from '../../util/webFramework/framework/WebFramework';
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 
+import { ApplicationError } from '../../util/errors/ApplicationError';
 import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
+import Logger from '../../util/logger';
 import { Server } from 'http';
 
 export interface ExpressMiddlewareFunction {
-  (req: Request, res: Response): Promise<void>;
+  (req: Request, res: Response, _next: NextFunction): Promise<void>;
 }
 
+export interface ExpressErrorMiddlewareFunction {
+  (
+    err: ApplicationError,
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ): Promise<void>;
+}
 export default class ExpressWebFramework
   implements IWebFramework<ExpressMiddlewareFunction>
 {
@@ -30,6 +40,11 @@ export default class ExpressWebFramework
   public addMiddleware(middlewareFactory: IMiddlewareFactory): void {
     const middleware = middlewareFactory.getMiddleware();
     this.application.use(middleware.exec() as ExpressMiddlewareFunction);
+  }
+
+  public addErrorMiddleware(middlewareFactory: IMiddlewareFactory): void {
+    const middleware = middlewareFactory.getMiddleware();
+    this.application.use(middleware.exec() as ExpressErrorMiddlewareFunction);
   }
 
   public async closeServer(): Promise<void> {
@@ -55,12 +70,22 @@ export default class ExpressWebFramework
   }
 
   public execController(controller: BaseController): ExpressMiddlewareFunction {
-    return async (req: Request, res: Response) => {
-      const httpRequest = this.getHttpRequest(req);
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const httpRequest = this.getHttpRequest(req);
 
-      const httpResponse = await controller.execute(httpRequest);
+        const httpResponse = await controller.execute(httpRequest);
 
-      res.status(httpResponse.statusCode).json(httpResponse.body);
+        res.status(httpResponse.statusCode).json(httpResponse.body);
+        Logger.info({
+          msg: `${req.method} on ${req.path}`,
+          method: req.method,
+          status: httpResponse.statusCode,
+          body: httpResponse.body,
+        });
+      } catch (error) {
+        next(error);
+      }
     };
   }
 
