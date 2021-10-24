@@ -38,5 +38,23 @@ describe('ExpressErrorMiddleware Tests', () => {
       expect(status).toBeCalledWith(fakeCallback().statusCode);
       expect(json).toBeCalledWith(fakeCallback().body);
     });
+
+    it('should call rateLimiter with 500 when callback return no statusCode', async () => {
+      const status = jest.spyOn(fakeResponse, 'status');
+      const expressRateLimiter = new ExpressErrorMiddleware(() => ({
+        body: 'Fake Body',
+      }));
+      const middleware = expressRateLimiter.exec();
+
+      await middleware(
+        new NotFoundError(),
+        fakeRequest as Request,
+        fakeResponse as Response,
+        () => ''
+      );
+
+      expect(status).toBeCalledWith(500);
+      expect(json).toBeCalledWith(fakeCallback().body);
+    });
   });
 });

@@ -2,6 +2,7 @@ import elasticsearch, { Client } from 'elasticsearch';
 
 import { ApplicationError } from '../../../util/errors/ApplicationError';
 import Env from '../../../config/Env';
+import { ErrorService } from '../../../services/ErrorService';
 import PinoLogger from '../pino/index';
 
 const elasticSearchEnv = Env.app.logger.elasticSearch;
@@ -28,11 +29,10 @@ export default class ElasticSearchService {
     try {
       const client = await this.getClient();
       await client.index(params);
-    } catch (error) {
+    } catch (err) {
+      const error = ErrorService.parseApplicationError(err as ApplicationError);
       PinoLogger.getInstance().error({
-        msg: `ElasticSearch: ${(error as ApplicationError).statusCode} ${
-          (error as ApplicationError).message
-        }`,
+        msg: `ElasticSearch: ${error.statusCode} ${JSON.stringify(error.body)}`,
       });
     }
   }

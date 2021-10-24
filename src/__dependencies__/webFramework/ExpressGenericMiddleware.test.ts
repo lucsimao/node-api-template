@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 
+import { Error } from 'mongoose';
 import { ExpressGenericMiddleware } from './ExpressGenericMiddleware';
 
 const json = jest.fn();
@@ -35,6 +36,18 @@ describe('GenericMiddleware Tests', () => {
 
       expect(status).toBeCalledWith(fakeCallback().statusCode);
       expect(json).toBeCalledWith(fakeCallback().body);
+    });
+
+    it('should call next when exec throws error', async () => {
+      const next = jest.fn();
+      const expressRateLimiter = new ExpressGenericMiddleware(() => {
+        throw new Error('Fake Error');
+      });
+      const middleware = expressRateLimiter.exec();
+
+      await middleware(fakeRequest as Request, fakeResponse as Response, next);
+
+      expect(next).toBeCalledWith(new Error('Fake Error'));
     });
   });
 });
