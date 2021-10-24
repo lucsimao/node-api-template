@@ -25,7 +25,7 @@ describe('ElasticSearchService Tests', () => {
       const logParams = {
         index: 'Fake Index',
         type: 'Fake Type',
-        body: { timestamp: 'Fake Timestamp' },
+        body: { timestamp: new Date() },
       };
 
       await ElasticSearchService.log(logParams);

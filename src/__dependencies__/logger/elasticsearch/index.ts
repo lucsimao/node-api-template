@@ -18,8 +18,8 @@ export class ElasticSearchLogger implements ILogger {
   private logToElastic(type: string, body: { [key: string]: unknown }) {
     ElasticSearchService.log({
       index: 'api',
-      type,
-      body: { ...body, timestamp: new Date().toString() },
+      type: '_doc',
+      body: { ...body, timestamp: new Date(), type },
     });
   }
 

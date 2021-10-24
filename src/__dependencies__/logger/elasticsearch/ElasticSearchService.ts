@@ -1,12 +1,14 @@
 import elasticsearch, { Client } from 'elasticsearch';
 
+import { ApplicationError } from '../../../util/errors/ApplicationError';
 import Env from '../../../config/Env';
+import PinoLogger from '../pino/index';
 
 const elasticSearchEnv = Env.app.logger.elasticSearch;
 export interface ITransportParams {
   readonly index: string;
   readonly type: string;
-  readonly body: { timestamp: string; [key: string]: unknown };
+  readonly body: { timestamp: Date; [key: string]: unknown };
 }
 
 export default class ElasticSearchService {
@@ -23,7 +25,15 @@ export default class ElasticSearchService {
   }
 
   public static async log(params: ITransportParams): Promise<void> {
-    const client = await this.getClient();
-    await client.index(params);
+    try {
+      const client = await this.getClient();
+      await client.index(params);
+    } catch (error) {
+      PinoLogger.getInstance().error({
+        msg: `ElasticSearch: ${(error as ApplicationError).statusCode} ${
+          (error as ApplicationError).message
+        }`,
+      });
+    }
   }
 }

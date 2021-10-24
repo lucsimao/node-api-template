@@ -17,11 +17,11 @@ describe('ElasticSearchLogger Tests', () => {
     expect(log).toBeCalledWith({
       body: {
         msg: 'Fake message',
-        timestamp:
-          'Wed Oct 20 2021 00:56:01 GMT-0300 (Horário Padrão de Brasília)',
+        timestamp: expect.any(Date),
+        type: 'info',
       },
       index: 'api',
-      type: 'info',
+      type: '_doc',
     });
   });
   describe('warning', () => {
@@ -33,11 +33,11 @@ describe('ElasticSearchLogger Tests', () => {
       expect(log).toBeCalledWith({
         body: {
           msg: 'Fake message',
-          timestamp:
-            'Wed Oct 20 2021 00:56:01 GMT-0300 (Horário Padrão de Brasília)',
+          timestamp: expect.any(Date),
+          type: 'warning',
         },
         index: 'api',
-        type: 'warning',
+        type: '_doc',
       });
     });
   });
@@ -49,11 +49,11 @@ describe('ElasticSearchLogger Tests', () => {
     expect(log).toBeCalledWith({
       body: {
         msg: 'Fake message',
-        timestamp:
-          'Wed Oct 20 2021 00:56:01 GMT-0300 (Horário Padrão de Brasília)',
+        timestamp: expect.any(Date),
+        type: 'error',
       },
       index: 'api',
-      type: 'error',
+      type: '_doc',
     });
   });
 });
