@@ -3,17 +3,16 @@ import {
   IMiddlewareFactory,
 } from '../util/webFramework/framework/WebFramework';
 
-import { GenericMiddleware } from '../__dependencies__/webFramework/GenericMiddleware';
-import httpStatus from 'http-status-codes';
+import { ExpressGenericMiddleware } from '../__dependencies__/webFramework/ExpressGenericMiddleware';
+import { NotFoundError } from '../util/errors/NotFoundError';
 
 class NotFoundMiddleware implements IMiddlewareFactory {
   private middleware;
 
   constructor() {
-    this.middleware = new GenericMiddleware(() => ({
-      statusCode: httpStatus.NOT_FOUND,
-      body: { message: 'Not found' },
-    }));
+    this.middleware = new ExpressGenericMiddleware(() => {
+      throw new NotFoundError();
+    });
   }
 
   getMiddleware(): IMiddleware<unknown> {
