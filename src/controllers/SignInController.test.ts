@@ -1,6 +1,7 @@
 import { SignInController } from './SignInController';
 import { SignInProvider } from '../providers/SignInProvider';
 
+jest.mock('../providers/SignInProvider');
 const fakeHttpRequest = {
   body: 'Fake HttpRequest Body',
 };

@@ -43,6 +43,31 @@ $ yarn install
 $ yarn start
 ```
 
+### Elastic Search
+
+Caso o elastic search não funcione no docker, uma configuração do max_map_count pode ser necessária conforme a página oficial do [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144) recomenda.
+
+Para windows
+
+```sh
+wsl -d docker-desktop
+sysctl -w vm.max_map_count=262144
+```
+
+Para Linux
+
+```sh
+grep vm.max_map_count /etc/sysctl.conf
+vm.max_map_count=262144
+```
+
+Para MacOS ou Windows sem WSL
+
+```sh
+docker-machine ssh
+sudo sysctl -w vm.max_map_count=262144
+```
+
 # Test
 
 To execute this project tests, you must run the following commands:

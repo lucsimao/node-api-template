@@ -1,6 +1,7 @@
 import Env from './config/Env';
 import Logger from './util/logger';
 import database from './databases/persistenceDataBase';
+import errorMiddleware from './middlewares/ErrorMiddleware';
 import notFoundMiddleware from './middlewares/NotFoundMiddleware';
 import rateLimiterMiddleware from './middlewares/RateLimiterMiddleware';
 import routes from './routes';
@@ -34,6 +35,7 @@ export default class App {
     this.application.addMiddleware(swaggerMiddleware);
     routes.setup(this.application);
     this.application.addMiddleware(notFoundMiddleware);
+    this.application.addErrorMiddleware(errorMiddleware);
     Logger.info({ msg: 'Finished routes setup' });
   }
 

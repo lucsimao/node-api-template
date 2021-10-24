@@ -1,6 +1,8 @@
 import { UserProvider } from '../providers/UserProvider';
 import { UsersControllers } from './UsersController';
 
+jest.mock('../providers/UserProvider');
+
 const fakeHttpRequest = {
   body: 'Fake HttpRequest Body',
 };

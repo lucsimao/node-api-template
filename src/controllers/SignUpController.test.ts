@@ -2,6 +2,8 @@ import Logger from '../util/logger';
 import { SignUpController } from './SignUpController';
 import { SignUpProvider } from '../providers/SignUpProvider';
 
+jest.mock('../providers/SignUpProvider');
+
 const fakeHttpRequest = {
   body: 'Fake HttpRequest Body',
 };

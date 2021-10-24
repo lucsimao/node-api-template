@@ -1,4 +1,4 @@
-import { ElasticSearchLogger } from './transports/elasticsearch/logger';
+import { ElasticSearchLogger } from './elasticsearch';
 import Env from '../../config/Env';
 import { ILogger } from '../../util/logger/ILogger';
 import PinoLogger from './pino';

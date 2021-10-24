@@ -4,7 +4,8 @@
   "reporters": ["html", "clear-text", "progress", "dashboard"],
   "mutate": [
     "{src,lib}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|jsx|tsx|html|vue)",
-    "!src/index.ts"
+    "!src/index.ts",
+    "!src/openapirc.ts"
   ],
   "jest": {
     "projectType": "custom",
@@ -14,5 +15,5 @@
   "cleanTempDir": true,
   "testRunner": "jest",
   "coverageAnalysis": "perTest",
-  "thresholds": { "high": 80, "low": 60, "break": 60 }
+  "thresholds": { "high": 80, "low": 60, "break": 75 }
 }

@@ -21,7 +21,6 @@ export default class MongoUserRepositoryModel
 
   public async findOne(user: Partial<IUser>): Promise<IUser | undefined> {
     const result = await this.UserModel.findOne(user);
-
     return result?.toJSON();
   }
 

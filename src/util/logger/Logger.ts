@@ -11,13 +11,6 @@ export class Logger {
     this.loggers.push(...loggers);
   }
 
-  public removeLogger(logger: ILogger): void {
-    const loggerIndex = this.loggers.indexOf(logger);
-    if (loggerIndex !== -1) {
-      this.loggers.splice(loggerIndex);
-    }
-  }
-
   public info(message: ILoggerParams): void {
     this.loggers.forEach((logger) => {
       logger.info(message);
