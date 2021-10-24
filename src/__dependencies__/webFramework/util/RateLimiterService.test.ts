@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import { Options } from 'express-rate-limit';
 import { RateLimiterService } from './RateLimiterService';
@@ -27,7 +27,7 @@ const fakeCallback = () => ({
   body: 'Fake Body',
 });
 
-const fakeNext = {} as NextFunction;
+const fakeNext = () => '';
 
 describe('RateLimiterService Tests', () => {
   describe('getRateLimiterParams', () => {
@@ -53,7 +53,7 @@ describe('RateLimiterService Tests', () => {
         await params.handler(
           fakeRequest as Request,
           fakeResponse as Response,
-          fakeNext as NextFunction
+          fakeNext
         );
 
       expect(status).toBeCalledWith(fakeCallback().statusCode);

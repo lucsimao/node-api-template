@@ -4,7 +4,7 @@ describe('SignIn Tests', () => {
       const response = await global.testRequest.get('/invalid').send();
 
       expect(response.body).toEqual({
-        message: 'Not found',
+        message: 'Not Found',
       });
 
       expect(response.status).toBe(404);
