@@ -11,7 +11,7 @@
     "start:local": "dotenv -e .env -- ts-node-dev src/index.ts",
     "test": "yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
     "test:unit": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.unit.config.js --coverage --detectOpenHandles",
-    "test:functional": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.functional.config.js --forceExit --runInBand",
+    "test:functional": "dotenv -e envs/test.env -- jest --config ./config/jest/jest.functional.config.js  --runInBand --detectOpenHandles",
     "test:mutation": "dotenv -e envs/test.env -- stryker run",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",

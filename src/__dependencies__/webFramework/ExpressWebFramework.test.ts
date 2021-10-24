@@ -4,6 +4,8 @@ import express, { Request, Response } from 'express';
 import { UsersControllers } from '../../controllers/UsersController';
 import expressFramework from './index';
 
+jest.mock('swagger-stats');
+
 jest.mock('express', () => {
   const express = jest.fn().mockReturnValue({
     use: (callBack?: CallableFunction) => {
@@ -75,7 +77,9 @@ describe('ExpressFramework Tests', () => {
 
   describe('closeServer', () => {
     it('should call methods when closeServer', () => {
-      const close = jest.spyOn((expressFramework as any).server, 'close');
+      const close = jest
+        .spyOn((expressFramework as any).server, 'close')
+        .mockReturnValue('');
 
       expressFramework.closeServer();
 

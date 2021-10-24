@@ -9,6 +9,7 @@ import { BaseController } from '../../abstracts/BaseController';
 import { IHttpRequest } from '../../interfaces/IHttpRequest';
 import Logger from '../../util/logger';
 import { Server } from 'http';
+import swaggerStats from 'swagger-stats';
 
 export interface ExpressMiddlewareFunction {
   (req: Request, res: Response, _next: NextFunction): Promise<void>;
@@ -49,6 +50,7 @@ export default class ExpressWebFramework
 
   public async closeServer(): Promise<void> {
     await this.server?.close();
+    await swaggerStats.stop();
   }
 
   public get(
