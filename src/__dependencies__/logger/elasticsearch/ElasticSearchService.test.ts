@@ -1,8 +1,9 @@
 import ElasticSearchService from './ElasticSearchService';
+import PinoLogger from '../pino';
 import elasticsearch from 'elasticsearch';
 
-jest.mock('elasticsearch');
 const index = jest.fn();
+
 elasticsearch.Client = jest.fn().mockReturnValue({ index });
 
 describe('ElasticSearchService Tests', () => {
@@ -31,6 +32,25 @@ describe('ElasticSearchService Tests', () => {
       await ElasticSearchService.log(logParams);
 
       expect(index).toBeCalledWith(logParams);
+    });
+
+    it('should log when getClients throw error', async () => {
+      index.mockImplementationOnce(() => {
+        throw new Error('Fake Error');
+      });
+      const error = jest.spyOn(PinoLogger.prototype, 'error');
+      const logParams = {
+        index: 'Fake Index',
+        type: 'Fake Type',
+        body: { timestamp: new Date() },
+      };
+
+      await ElasticSearchService.log(logParams);
+
+      expect(index).toBeCalledWith(logParams);
+      expect(error).toBeCalledWith({
+        msg: 'ElasticSearch: 400 {"message":"Fake Error"}',
+      });
     });
   });
 });

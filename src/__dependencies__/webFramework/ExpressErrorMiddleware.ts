@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 
-import { ApplicationError } from '../../util/errors/ApplicationError';
 import { Error } from 'mongoose';
 import { ExpressErrorMiddlewareFunction } from './ExpressWebFramework';
 import { IMiddleware } from '../../util/webFramework/framework/WebFramework';
@@ -17,11 +15,11 @@ export class ExpressErrorMiddleware
   public exec(): ExpressErrorMiddlewareFunction {
     return async (
       error: Error,
-      req: Request,
+      _: Request,
       res: Response,
-      _: NextFunction
+      __: NextFunction
     ): Promise<void> => {
-      const result = this.callback(error as ApplicationError);
+      const result = this.callback(error);
       res.status(result.statusCode || 500).json(result.body);
     };
   }

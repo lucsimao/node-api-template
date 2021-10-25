@@ -29,8 +29,6 @@ const fakeHttpRequest = {
 };
 
 const invalidHttpRequest = {
-  params: {},
-  headers: {},
   body: 'Fake Body Invalid',
 };
 
