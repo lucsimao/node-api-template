@@ -32,4 +32,37 @@ describe('Env tests', () => {
       },
     });
   });
+
+  it('should return default when called without process.env', () => {
+    (env as any).appEnvs = undefined;
+
+    process.env = {};
+
+    const app = env.app;
+    expect(app).toEqual({
+      auth: { expiration: '30m', secret: 'secret' },
+      cryptography: { salt: 10 },
+      database: {
+        address: 'localhost',
+        database: 'test',
+        password: 'my_password',
+        port: '27017',
+        ssl: 'false',
+        username: 'root',
+      },
+      logger: {
+        elasticSearch: {
+          port: 9200,
+          url: 'localhost',
+          version: '7.x',
+        },
+        options: [''],
+      },
+      port: 3333,
+      rateLimiter: {
+        maxInterval: 60000,
+        maxRequests: 10,
+      },
+    });
+  });
 });
