@@ -7,6 +7,16 @@ const fakeLogger = {
 };
 
 describe('Logger Tests', () => {
+  describe('constructor', () => {
+    it('should add logger info when logger is passed in constructor', () => {
+      const info = jest.spyOn(fakeLogger, 'info');
+      const logger = new Logger(fakeLogger);
+
+      logger.info({ msg: 'logger' });
+      expect(info).toBeCalledWith({ msg: 'logger' });
+    });
+  });
+
   describe('info', () => {
     it('should call info when logger.info is called', () => {
       const info = jest.spyOn(fakeLogger, 'info');

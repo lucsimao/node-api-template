@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Env from '../../config/Env';
 import { LoggerService } from './LoggerService';
 import defaultLogger from './index';
